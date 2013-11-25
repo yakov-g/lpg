@@ -54,6 +54,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -465,6 +466,18 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	@Override
+	public void onStart() {
+		super.onStart();
+		EasyTracker.getInstance().activityStart(this);
+	}
+	
+	@Override
+	  public void onStop() {
+	    super.onStop();
+	    EasyTracker.getInstance().activityStop(this);  // Add this method.
+	  }
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -564,7 +577,8 @@ public class MainActivity extends FragmentActivity implements
 				String url = jo.getString("time");
 				if (!url.startsWith("http://") && !url.startsWith("https://"))
 					url = "http://" + url;
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+						Uri.parse(url));
 				startActivity(browserIntent);
 			} catch (Exception e) {
 				e.printStackTrace();
