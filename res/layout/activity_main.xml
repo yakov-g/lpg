@@ -33,7 +33,8 @@
             android:shadowRadius="5"
             android:text="\u003c"
             android:textColor="#FFFFFF"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:onClick="prev_but_clicked"/>
 
         <TextView
             android:id="@+id/textView1"

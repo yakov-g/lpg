@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import android.view.View.OnClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,6 +45,8 @@ import android.preference.PreferenceManager;
 
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.ViewGroup.LayoutParams;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,6 +55,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
@@ -86,6 +90,13 @@ public class MainActivity extends FragmentActivity implements
 	private double max_price = 0;
 	private double dprice = 2.0;
 	private SharedPreferences sharedPref;
+
+	PopupWindow popUp;
+	LinearLayout layout;
+	TextView tv;
+	Button but;
+	LayoutParams params;
+	boolean click = true;
 
 	private void setMinMaxPrice(double _min_price) {
 		min_price = _min_price;
@@ -277,6 +288,28 @@ public class MainActivity extends FragmentActivity implements
 		 * StrictMode.ThreadPolicy.Builder(oldThreadPolicy
 		 * ).permitNetwork().permitDiskReads().permitDiskWrites().build());
 		 */
+
+		popUp = new PopupWindow(this);
+		layout = new LinearLayout(this);
+		tv = new TextView(this);
+		but = new Button(this);
+		params = new LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT);
+
+		layout.setOrientation(LinearLayout.VERTICAL);
+		tv.setText("Hi this is a sample text for popup window");
+		layout.addView(tv, params);
+		but = new Button(this);
+		but.setText("Click Me");
+		but.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				popUp.dismiss();
+				click = true;
+			}
+		});
+		layout.addView(but, params);
+		popUp.setContentView(layout);
+
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		setContentView(R.layout.activity_main);
 		tw = (TextView) findViewById(R.id.textView1);
@@ -470,12 +503,12 @@ public class MainActivity extends FragmentActivity implements
 		super.onStart();
 		EasyTracker.getInstance().activityStart(this);
 	}
-	
+
 	@Override
-	  public void onStop() {
-	    super.onStop();
-	    EasyTracker.getInstance().activityStop(this);  // Add this method.
-	  }
+	public void onStop() {
+		super.onStop();
+		EasyTracker.getInstance().activityStop(this); // Add this method.
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -700,6 +733,19 @@ public class MainActivity extends FragmentActivity implements
 			return true;
 		default:
 			return super.onContextItemSelected(item);
+		}
+	}
+
+	public void prev_but_clicked(View view) {
+		status("Yahoo");
+
+		if (click) {
+			popUp.showAtLocation(this.layout, Gravity.NO_GRAVITY, 10, 10);
+			popUp.update(10, 300, 300, 180);
+			click = false;
+		} else {
+			popUp.dismiss();
+			click = true;
 		}
 	}
 }
