@@ -24,6 +24,7 @@
     <string name="pref_stations">Show LPG stations</string>
     <string name="pref_garages">Show LPG garages</string>
     <string name="pref_message_bar">Show messages</string>
+    <string name="pref_version_code">pref_version_code</string>
     <string name="help_content">This app helps you to locate LPG refilling stations in Israel.\n 
 		                It allows you to select the station and get driving direction using your favorite
 		                navigation application.\n\n

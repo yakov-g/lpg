@@ -33,6 +33,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -312,6 +313,7 @@ public class MainActivity extends FragmentActivity implements
 
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		setContentView(R.layout.activity_main);
+
 		tw = (TextView) findViewById(R.id.textView1);
 		but_prev = (Button) findViewById(R.id.button_prev);
 		but_next = (Button) findViewById(R.id.button_next);
@@ -323,7 +325,7 @@ public class MainActivity extends FragmentActivity implements
 		} else {
 			message_bar.setVisibility(View.VISIBLE);
 		}
-
+		app_version_changed();
 		/* Initialize receiver to handle messages from service intent. */
 		ResponseReceiver rr = new ResponseReceiver();
 		IntentFilter mStatusIntentFilter = new IntentFilter("AnswerIntent");
@@ -748,4 +750,33 @@ public class MainActivity extends FragmentActivity implements
 			click = true;
 		}
 	}
+
+	/* Check if saved version code == current code.
+	 * Used to show popup window on first run after install or update*/
+	public boolean app_version_changed() {
+		int saved_versionCode = 0;
+		int current_versionCode = 0;
+		boolean ret = false;
+
+		PackageInfo packageInfo;
+		try {
+			packageInfo = this.getPackageManager().getPackageInfo(
+					this.getPackageName(), 0);
+			current_versionCode = packageInfo.versionCode;
+		} catch (Exception ee) {
+			ee.printStackTrace();
+		}
+
+		saved_versionCode = sharedPref.getInt(
+				getString(R.string.pref_version_code), 0);
+		if (current_versionCode != saved_versionCode) {
+			ret = true;
+			SharedPreferences.Editor editor = sharedPref.edit();
+			editor.putInt(getString(R.string.pref_version_code),
+					current_versionCode);
+			editor.commit();
+		}
+		return ret;
+	}
+
 }
