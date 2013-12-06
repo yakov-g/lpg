@@ -36,6 +36,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -91,13 +92,6 @@ public class MainActivity extends FragmentActivity implements
 	private double max_price = 0;
 	private double dprice = 2.0;
 	private SharedPreferences sharedPref;
-
-	PopupWindow popUp;
-	LinearLayout layout;
-	TextView tv;
-	Button but;
-	LayoutParams params;
-	boolean click = true;
 
 	private void setMinMaxPrice(double _min_price) {
 		min_price = _min_price;
@@ -290,27 +284,6 @@ public class MainActivity extends FragmentActivity implements
 		 * ).permitNetwork().permitDiskReads().permitDiskWrites().build());
 		 */
 
-		popUp = new PopupWindow(this);
-		layout = new LinearLayout(this);
-		tv = new TextView(this);
-		but = new Button(this);
-		params = new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT);
-
-		layout.setOrientation(LinearLayout.VERTICAL);
-		tv.setText("Hi this is a sample text for popup window");
-		layout.addView(tv, params);
-		but = new Button(this);
-		but.setText("Click Me");
-		but.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				popUp.dismiss();
-				click = true;
-			}
-		});
-		layout.addView(but, params);
-		popUp.setContentView(layout);
-
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		setContentView(R.layout.activity_main);
 
@@ -325,7 +298,8 @@ public class MainActivity extends FragmentActivity implements
 		} else {
 			message_bar.setVisibility(View.VISIBLE);
 		}
-		app_version_changed();
+		
+
 		/* Initialize receiver to handle messages from service intent. */
 		ResponseReceiver rr = new ResponseReceiver();
 		IntentFilter mStatusIntentFilter = new IntentFilter("AnswerIntent");
@@ -388,6 +362,10 @@ public class MainActivity extends FragmentActivity implements
 		setMinMaxPrice(ld.getMinPrice());
 		/* Put markers on map. */
 		drawMap(ld.getArr());
+		/* If version was changed, show popup window to get liked */
+		if (app_version_changed()) {
+			//showPopup();
+		}
 		runTimeFetchService();
 	}
 
@@ -740,19 +718,13 @@ public class MainActivity extends FragmentActivity implements
 
 	public void prev_but_clicked(View view) {
 		status("Yahoo");
-
-		if (click) {
-			popUp.showAtLocation(this.layout, Gravity.NO_GRAVITY, 10, 10);
-			popUp.update(10, 300, 300, 180);
-			click = false;
-		} else {
-			popUp.dismiss();
-			click = true;
-		}
+		showPopup();
 	}
 
-	/* Check if saved version code == current code.
-	 * Used to show popup window on first run after install or update*/
+	/*
+	 * Check if saved version code == current code. Used to show popup window on
+	 * first run after install or update
+	 */
 	public boolean app_version_changed() {
 		int saved_versionCode = 0;
 		int current_versionCode = 0;
@@ -779,4 +751,26 @@ public class MainActivity extends FragmentActivity implements
 		return ret;
 	}
 
+	public void showPopup() {
+		// Inflate the popup_layout.xml
+		LinearLayout viewGroup = (LinearLayout) this.findViewById(R.id.popup);
+		LayoutInflater layoutInflater = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View layout = layoutInflater.inflate(R.layout.popup_start, viewGroup);
+
+		Button but;
+		final PopupWindow popup = new PopupWindow(this);
+
+		// popup.setBackgroundDrawable(new BitmapDrawable());
+
+		but = (Button) layout.findViewById(R.id.close);
+		but.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				popup.dismiss();
+			}
+		});
+		popup.setContentView(layout);
+		popup.showAtLocation(layout, Gravity.CENTER_HORIZONTAL, 50, 50);
+		popup.update(10, 300, 500, 500);
+	}
 }
