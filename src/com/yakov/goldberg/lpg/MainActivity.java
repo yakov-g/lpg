@@ -56,6 +56,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -298,7 +299,6 @@ public class MainActivity extends FragmentActivity implements
 		} else {
 			message_bar.setVisibility(View.VISIBLE);
 		}
-		
 
 		/* Initialize receiver to handle messages from service intent. */
 		ResponseReceiver rr = new ResponseReceiver();
@@ -364,7 +364,7 @@ public class MainActivity extends FragmentActivity implements
 		drawMap(ld.getArr());
 		/* If version was changed, show popup window to get liked */
 		if (app_version_changed()) {
-			//showPopup();
+			showPopup();
 		}
 		runTimeFetchService();
 	}
@@ -756,21 +756,36 @@ public class MainActivity extends FragmentActivity implements
 		LinearLayout viewGroup = (LinearLayout) this.findViewById(R.id.popup);
 		LayoutInflater layoutInflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View layout = layoutInflater.inflate(R.layout.popup_start, viewGroup);
+		final View layout = layoutInflater.inflate(R.layout.popup_start,
+				viewGroup);
 
-		Button but;
+		Button close_but;
+		ImageButton rate_but;
 		final PopupWindow popup = new PopupWindow(this);
 
 		// popup.setBackgroundDrawable(new BitmapDrawable());
 
-		but = (Button) layout.findViewById(R.id.close);
-		but.setOnClickListener(new OnClickListener() {
+		close_but = (Button) layout.findViewById(R.id.close);
+		rate_but = (ImageButton) layout.findViewById(R.id.rate_button);
+		close_but.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				popup.dismiss();
 			}
 		});
+
+		rate_but.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				String str = "https://play.google.com/store/apps/details?id=com.yakov.goldberg.lpg";
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(str)));
+			}
+		});
+		
 		popup.setContentView(layout);
-		popup.showAtLocation(layout, Gravity.CENTER_HORIZONTAL, 50, 50);
-		popup.update(10, 300, 500, 500);
+		layout.post(new Runnable() {
+			public void run() {
+				popup.showAtLocation(layout, Gravity.CENTER_HORIZONTAL, 50, 50);
+				popup.update(10, 300, 500, 500);
+			}
+		});
 	}
 }

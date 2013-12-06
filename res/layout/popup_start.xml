@@ -4,7 +4,8 @@
    android:layout_width="wrap_content"
    android:id="@+id/popup"
    android:layout_height="wrap_content"
-   android:orientation="vertical" >
+   android:orientation="vertical"
+   android:background="@drawable/drop_surface">
 
 <TextView
    android:id="@+id/textView1"
@@ -19,6 +20,14 @@
    android:layout_width="wrap_content"
    android:layout_height="wrap_content"
    android:text="This is a simple popup" />
+
+<ImageButton
+   android:id="@+id/rate_button"
+   android:src="@drawable/star_empty_64"
+   android:layout_marginTop="10dp"
+   android:layout_gravity="center_horizontal"
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"/>
 
 <Button
    android:id="@+id/close"

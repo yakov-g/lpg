@@ -33,7 +33,6 @@ public class HelpActivity extends Activity {
 				String str = "https://play.google.com/store/apps/details?id=com.yakov.goldberg.lpg";
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(str)));
 			}
-
 		});
 	}
 
