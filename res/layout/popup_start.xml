@@ -1,48 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--  android:background="@drawable/popup_bg"   -->
+<!-- android:background="@drawable/popup_bg" -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   android:layout_width="wrap_content"
-   android:id="@+id/popup"
-   android:layout_height="wrap_content"
-   android:orientation="vertical"
-   android:background="@drawable/drop_surface">
+    android:id="@+id/popup"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/drop_surface"
+    android:orientation="vertical" >
 
-<TextView
-   android:id="@+id/textView1"
-   android:layout_width="wrap_content"
-   android:layout_height="wrap_content"
-   android:text="Popup"
-   android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Popup"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-<TextView
-   android:id="@+id/textView2"
-   android:layout_marginTop="5dp"
-   android:layout_width="wrap_content"
-   android:layout_height="wrap_content"
-   android:text="This is a simple popup" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="This is a simple popup" />
 
-<ImageButton
-   android:id="@+id/rate_button"
-   android:background="@drawable/star_empty_64"
-   android:layout_marginTop="10dp"
-   android:layout_gravity="center_horizontal"
-   android:layout_width="wrap_content"
-   android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:id="@+id/popup2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal" >
 
-<ImageButton
-   android:id="@+id/facebook_button"
-   android:background="@drawable/facebook_icon"
-   android:layout_marginTop="10dp"
-   android:layout_gravity="center_horizontal"
-   android:layout_width="64dp"
-   android:layout_height="64dp"/>
+        <ImageButton
+            android:id="@+id/rate_button"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rate_btn_selector" />
 
-<Button
-   android:id="@+id/close"
-   android:layout_marginTop="10dp"
-   android:layout_gravity="center_horizontal"
-   android:layout_width="wrap_content"
-   android:layout_height="wrap_content"
-   android:text="Close" />
+        <ImageButton
+            android:id="@+id/facebook_button"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/facebook_btn_selector" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:text="Close" />
 
 </LinearLayout>
