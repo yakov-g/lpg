@@ -43,7 +43,7 @@ public class HelpActivity extends Activity {
 		return true;
 	}
 
-	public void help_send_mail_clicked(View view) {
+	public void help_mail_send_clicked(View view) {
 		Intent i = (new Helper()).send_mail_to_developer("Subject",
 				"I'm email body.");
 		startActivity(Intent.createChooser(i, "Send Email"));

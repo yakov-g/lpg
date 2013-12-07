@@ -39,12 +39,12 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/facebook_btn_selector" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="help_send_mail_clicked"
-                android:text="@string/send_message" />
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:onClick="help_mail_send_clicked"
+                android:background="@drawable/mail_send_btn_selector" />
         </LinearLayout>
 
 
