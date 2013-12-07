@@ -37,6 +37,7 @@
                 android:layout_height="64dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
+                android:onClick="help_facebook_clicked"
                 android:background="@drawable/facebook_btn_selector" />
 
             <ImageButton

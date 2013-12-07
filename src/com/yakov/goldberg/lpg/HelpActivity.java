@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -42,10 +41,14 @@ public class HelpActivity extends Activity {
 		getMenuInflater().inflate(R.menu.help, menu);
 		return true;
 	}
-
+	
 	public void help_mail_send_clicked(View view) {
 		Intent i = (new Helper()).send_mail_to_developer("Subject",
 				"I'm email body.");
 		startActivity(Intent.createChooser(i, "Send Email"));
+	}
+	public void help_facebook_clicked(View view) {
+		Intent i = (new Helper()).getOpenFacebookIntent(this);
+		startActivity(i);
 	}
 }

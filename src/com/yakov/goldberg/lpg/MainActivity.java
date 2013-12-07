@@ -39,7 +39,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -731,13 +730,14 @@ public class MainActivity extends FragmentActivity implements
 				viewGroup);
 
 		Button close_but;
-		ImageButton rate_but;
+		ImageButton rate_but, fb_but;
 		final PopupWindow popup = new PopupWindow(this);
 
 		// popup.setBackgroundDrawable(new BitmapDrawable());
 
 		close_but = (Button) layout.findViewById(R.id.close);
 		rate_but = (ImageButton) layout.findViewById(R.id.rate_button);
+		fb_but = (ImageButton) layout.findViewById(R.id.facebook_button);
 		close_but.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				popup.dismiss();
@@ -751,7 +751,15 @@ public class MainActivity extends FragmentActivity implements
 			}
 		});
 
-		popup.setContentView(layout);
+		final Context ctx = this;
+		fb_but.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				Intent i = (new Helper()).getOpenFacebookIntent(ctx);
+				startActivity(i);
+			}
+		});
+
+	    popup.setContentView(layout);
 		layout.post(new Runnable() {
 			public void run() {
 				popup.showAtLocation(layout, Gravity.CENTER_HORIZONTAL, 50, 50);
