@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import android.view.View.OnClickListener;
 
 import org.json.JSONArray;
@@ -47,7 +50,6 @@ import android.preference.PreferenceManager;
 
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.ViewGroup.LayoutParams;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -93,6 +95,7 @@ public class MainActivity extends FragmentActivity implements
 	private double max_price = 0;
 	private double dprice = 2.0;
 	private SharedPreferences sharedPref;
+	Map<Integer, String> map;
 
 	private void setMinMaxPrice(double _min_price) {
 		min_price = _min_price;
@@ -293,6 +296,19 @@ public class MainActivity extends FragmentActivity implements
 		but_next = (Button) findViewById(R.id.button_next);
 		message_bar = (LinearLayout) findViewById(R.id.message_bar);
 		boolean show_messages = sharedPref.getBoolean("pref_message_bar", true);
+		map = new HashMap<Integer, String>();
+		map.put(1, "da_marker_and.png");
+		map.put(2, "paz_marker_and.png");
+		map.put(3, "sonol_marker_and.png");
+		map.put(4, "delek_marker_and.png");
+		map.put(5, "tapuz_marker_and.png");
+		map.put(6, "amisragas_marker_and.png");
+		map.put(7, "yaad_marker_and.png");
+		map.put(8, "gaz_igal_marker_and.png");
+		map.put(9, "supergas_marker_and.png");
+		map.put(10, "ten_marker_and.png");
+		map.put(201, "nanagas_marker_and.png");
+		map.put(202, "gaspro_marker_and.png");
 
 		if (!show_messages) {
 			message_bar.setVisibility(View.GONE);
@@ -392,65 +408,20 @@ public class MainActivity extends FragmentActivity implements
 				int owner = item.getInt("owner");
 
 				BitmapDescriptor mar = null;
-				if (type == 1) {
-					mar = BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
-				} else if (type == 2) {
-					mar = BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA);
-				}
 
-				if (show_logo) {
-					switch (owner) {
+				if (show_logo && map.containsKey(owner)) {
+					mar = BitmapDescriptorFactory.fromAsset(map.get(owner));
+				} else {
+					float color = 0;
+					switch (type) {
 					case 1:
-						mar = BitmapDescriptorFactory
-								.fromAsset("da_marker_and.png");
+						color = BitmapDescriptorFactory.HUE_AZURE;
 						break;
 					case 2:
-						mar = BitmapDescriptorFactory
-								.fromAsset("paz_marker_and.png");
-						break;
-					case 3:
-						mar = BitmapDescriptorFactory
-								.fromAsset("sonol_marker_and.png");
-						break;
-					case 4:
-						mar = BitmapDescriptorFactory
-								.fromAsset("delek_marker_and.png");
-						break;
-					case 5:
-						mar = BitmapDescriptorFactory
-								.fromAsset("tapuz_marker_and.png");
-						break;
-					case 6:
-						mar = BitmapDescriptorFactory
-								.fromAsset("amisragas_marker_and.png");
-						break;
-					case 7:
-						mar = BitmapDescriptorFactory
-								.fromAsset("yaad_marker_and.png");
-						break;
-					case 8:
-						mar = BitmapDescriptorFactory
-								.fromAsset("gaz_igal_marker_and.png");
-						break;
-					case 9:
-						mar = BitmapDescriptorFactory
-								.fromAsset("supergas_marker_and.png");
-						break;
-					case 10:
-						mar = BitmapDescriptorFactory
-								.fromAsset("ten_marker_and.png");
-						break;
-					case 201:
-						mar = BitmapDescriptorFactory
-								.fromAsset("nanagas_marker_and.png");
-						break;
-					case 202:
-						mar = BitmapDescriptorFactory
-								.fromAsset("gaspro_marker_and.png");
+						color = BitmapDescriptorFactory.HUE_MAGENTA;
 						break;
 					}
+					mar = BitmapDescriptorFactory.defaultMarker(color);
 				}
 
 				MarkerOptions m = new MarkerOptions().title(idx)
@@ -779,7 +750,7 @@ public class MainActivity extends FragmentActivity implements
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(str)));
 			}
 		});
-		
+
 		popup.setContentView(layout);
 		layout.post(new Runnable() {
 			public void run() {
