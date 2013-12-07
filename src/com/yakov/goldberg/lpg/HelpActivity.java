@@ -26,7 +26,7 @@ public class HelpActivity extends Activity {
 				+ "  - added LPG garages;\n" + "  - bug fixes.";
 		tw.setText(en_str + "\n\n\n" + ver_str + "\n\n" + changes);
 
-		final Button mybutton = (Button) findViewById(R.id.button_rate);
+		final ImageButton mybutton = (ImageButton) findViewById(R.id.help_rate_button);
 		mybutton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

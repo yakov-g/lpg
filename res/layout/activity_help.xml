@@ -16,18 +16,38 @@
             android:layout_height="wrap_content"
             android:maxLines="50" />
 
-        <Button
-            android:id="@+id/button_send"
+        <LinearLayout
+            android:id="@+id/help_buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="help_send_mail_clicked"
-            android:text="@string/send_message" />
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/button_rate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/rate_app" />
+            <ImageButton
+                android:id="@+id/help_rate_button"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rate_btn_selector" />
+
+            <ImageButton
+                android:id="@+id/help_facebook_button"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/facebook_btn_selector" />
+
+            <Button
+                android:id="@+id/button_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="help_send_mail_clicked"
+                android:text="@string/send_message" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
 </ScrollView>
