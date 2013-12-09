@@ -1,32 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="popup_content">Please rate us</string>
-    <string name="popup_later">Later</string>
+    <!-- General -->
+    <string name="version_string">Version: 0.1.2; build: 14</string>
+    
+    <!-- Action bar menu items -->
     <string name="app_name">גפ\'\'מ ישראל</string>
     <string name="action_settings">Settings</string>
     <string name="action_help">Help</string>
+    
+    <!-- Activities names -->
     <string name="title_activity_map">גפ\'\'מ ישראל</string>
     <string name="title_activity_help">Help</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="version_string">0.1.2 build: 14</string>
     
-    <string name="send_message">Send mail to developer</string>
-    <string name="rate_app">Rate LPG Israel</string>
+    <!-- Popup window -->
+    <string name="popup_content">We hope you enjoy using this application. Your opinion 
+        is very important to us, so we would ask you to rate application and visit our page on Facebook.
+        You can also do it later on \"Help\" page.</string>
+    <string name="popup_later">Later</string>
     
+    <!-- Marker's context menu items -->
     <string name="it_navigate">Navigate</string>
     <string name="it_price">Update price</string>
+    <string name="it_price_memo">price should be in range:</string>
     <string name="it_web">Visit web page</string>
     <string name="it_send_message">Send info about place</string>
-    <string name="it_price_memo">price should be in range:</string>
+    
+    <!-- Update dialog buttons -->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     
+    <!--  Preference strings -->
     <string name="pref_logo">Show logo</string>
     <string name="pref_stations">Show LPG stations</string>
     <string name="pref_garages">Show LPG garages</string>
     <string name="pref_message_bar">Show messages</string>
+     <!--  Preference value -->
     <string name="pref_version_code">pref_version_code</string>
+    
     <string name="help_content">This app helps you to locate LPG refilling stations in Israel.\n 
 		                It allows you to select the station and get driving direction using your favorite
 		                navigation application.\n\n

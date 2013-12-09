@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+     <!-- Action bar menu items -->
     <string name="action_settings">Настройки</string>
     <string name="action_help">Помощь</string>
+    <!-- Activities names -->
     <string name="title_activity_help">Помощь</string>
     <string name="title_activity_settings">Настройки</string>
+    
+    <!-- Popup window -->
+    <string name="popup_content">Нам очень важно Ваше мнение о приложении. 
+        Пожалуйста оцените нашу работу, а также посетите нашу страницу в Фейсбуке. 
+        Вы также можете сделать это позже на странице \"Помощь\"</string>
+    <string name="popup_later">Позже</string>
+    
+    <!-- Marker's context menu items -->
     <string name="it_navigate">Проложить маршрут</string>
     <string name="it_price">Обновить цену</string>
     <string name="it_price_memo">Цена должна быть в диапазоне:</string>
-    <string name="ok">OK</string>
+    <string name="it_web">Открыть сайт</string>
+    <string name="it_send_message">Послать сообщение о станции</string>
+    
+     <!-- Update dialog buttons -->
     <string name="cancel">Отменить</string>
+
+    <!--  Preference strings -->
     <string name="pref_logo">Показывать логотипы</string>
     <string name="pref_stations">Показывать заправки</string>
     <string name="pref_garages">Показывать автосервисы</string>
+    <string name="pref_message_bar">Показывать сообщения</string>
+    
     <string name="help_content">Данное приложение поможет Вам найти газовую автозаправку в Израиле и проложить маршрут с помощью Вашей любимой навигационной программы.\n\n
 		                Использование:\n
 		                При запуске карта автоматически отобразит Ваше текущее местоположение.\n

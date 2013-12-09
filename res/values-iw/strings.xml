@@ -1,17 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
+    <!-- General -->
+    <!-- Action bar menu items -->
      <string name="action_settings">הגדרות</string>
      <string name="action_help">עזרה</string>
+     
+     <!-- Activities names -->
      <string name="title_activity_help">עזרה</string>
      <string name="title_activity_settings">הגדרות</string>
+     
+    <!-- Popup window -->
+    <string name="popup_content">אנו מקווים שתיהנו להשתמש ביישום זה. הדעה שלך
+         מאוד חשוב לנו, ולכן היינו מבקשים מכם לדרג יישום ולבקר בדף שלנו בפייסבוק. אתה יכול לעשות זאת מאוחר יותר בדף \"עזרה\".</string>
+    <string name="popup_later">מאוחר יותר</string>
+     
+    <!-- Marker's context menu items -->
      <string name="it_navigate">נווט</string>
      <string name="it_price">עדכן מחיר</string>
      <string name="it_price_memo">הערך המוזן צריך להיות בין:</string>
-     <string name="ok">OK</string>
+     <string name="it_web">בקר בדף האינטרנט</string>
+     <string name="it_send_message">שלח מידע על מקום</string>
+     
+     <!-- Update dialog buttons -->
      <string name="cancel">ביטול</string>
+     
+     <!--  Preference strings -->
      <string name="pref_logo">הצג לוגו</string>
      <string name="pref_stations">הצג תחנות תדלוק בגז</string>
      <string name="pref_garages">הצג מוסכים</string>
+     <string name="pref_message_bar">הצג הודעות</string>
+     
      <string name="help_content">האפליקציה מציגה אה על גבי מפה את כל תחנות התדלוק בגז הקיימות בישראל. כמו כן, באפליקציה תוכלו למצוא מידע שימושי על התחנות: כתובת, שעות פעילות ומחירי הגז.
 אחרי שתבחרו בתחנה הרצוייה, תוכלו לקבל הוראות ניווט לתחנה הנבחרת.\n\n 
          הוראות שימוש:\n

@@ -735,7 +735,7 @@ public class MainActivity extends FragmentActivity implements
 
 		// popup.setBackgroundDrawable(new BitmapDrawable());
 
-		close_but = (Button) layout.findViewById(R.id.close);
+		close_but = (Button) layout.findViewById(R.id.later_but);
 		rate_but = (ImageButton) layout.findViewById(R.id.rate_button);
 		fb_but = (ImageButton) layout.findViewById(R.id.facebook_button);
 		close_but.setOnClickListener(new OnClickListener() {

@@ -19,11 +19,9 @@ public class HelpActivity extends Activity {
 		setContentView(R.layout.activity_help);
 
 		TextView tw = (TextView) findViewById(R.id.helptextView);
-		String en_str = getResources().getString(R.string.help_content);
+		String content_str = getResources().getString(R.string.help_content);
 		String ver_str = getResources().getString(R.string.version_string);
-		String changes = "Changes:\n  - added price update date;\n"
-				+ "  - added LPG garages;\n" + "  - bug fixes.";
-		tw.setText(en_str + "\n\n\n" + ver_str + "\n\n" + changes);
+		tw.setText(content_str + "\n\n" + ver_str + "\n");
 
 		final ImageButton mybutton = (ImageButton) findViewById(R.id.help_rate_button);
 		mybutton.setOnClickListener(new View.OnClickListener() {
@@ -43,8 +41,8 @@ public class HelpActivity extends Activity {
 	}
 	
 	public void help_mail_send_clicked(View view) {
-		Intent i = (new Helper()).send_mail_to_developer("Subject",
-				"I'm email body.");
+		Intent i = (new Helper()).send_mail_to_developer
+				("LPG Israel - mail to developer", "");
 		startActivity(Intent.createChooser(i, "Send Email"));
 	}
 	public void help_facebook_clicked(View view) {
