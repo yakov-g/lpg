@@ -3,6 +3,7 @@
      <string name="action_settings">הגדרות</string>
      <string name="action_help">עזרה</string>
      <string name="title_activity_help">עזרה</string>
+     <string name="title_activity_settings">הגדרות</string>
      <string name="it_navigate">נווט</string>
      <string name="it_price">עדכן מחיר</string>
      <string name="it_price_memo">הערך המוזן צריך להיות בין:</string>

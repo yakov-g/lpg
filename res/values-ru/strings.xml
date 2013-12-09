@@ -4,6 +4,7 @@
     <string name="action_settings">Настройки</string>
     <string name="action_help">Помощь</string>
     <string name="title_activity_help">Помощь</string>
+    <string name="title_activity_settings">Настройки</string>
     <string name="it_navigate">Проложить маршрут</string>
     <string name="it_price">Обновить цену</string>
     <string name="it_price_memo">Цена должна быть в диапазоне:</string>
