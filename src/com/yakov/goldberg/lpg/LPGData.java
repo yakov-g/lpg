@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,11 +22,13 @@ import android.text.format.Time;
 
 public class LPGData {
 
-	private ArrayList<JSONObject> arr_data;
+	private ArrayList<JSONObject> data_arr;
+	private Map<Integer, JSONObject> data_map;
 	private JSONObject config_data;
 
 	public LPGData() {
-		arr_data = new ArrayList<JSONObject>();
+		data_arr = new ArrayList<JSONObject>();
+		data_map = new HashMap<Integer, JSONObject>();
 	}
 
 	/* Read all data from InputStream */
@@ -54,10 +58,16 @@ public class LPGData {
 			arr = jo.getJSONArray("data");
 			jo = null;
 
-			arr_data.clear();
+			data_arr.clear();
+			data_map.clear();
 			for (int i = 0; i < arr.length(); i++) {
 				JSONObject item = arr.getJSONObject(i);
-				arr_data.add(item);
+				data_arr.add(item);
+				try {
+					data_map.put(item.getInt("id") , item);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -68,8 +78,8 @@ public class LPGData {
 		JSONObject root = new JSONObject();
 		JSONArray arr = new JSONArray();
 		try {
-			for (int i = 0; i < arr_data.size(); i++) {
-				JSONObject jo = arr_data.get(i);
+			for (int i = 0; i < data_arr.size(); i++) {
+				JSONObject jo = data_arr.get(i);
 				arr.put(jo);
 			}
 
@@ -137,7 +147,10 @@ public class LPGData {
 	}
 
 	public ArrayList<JSONObject> getArr() {
-		return arr_data;
+		return data_arr;
+	}
+	public Map<Integer, JSONObject> getMap() {
+		return data_map;
 	}
 
 	/* Copy data from Assets file into Internal file after first install */
@@ -174,7 +187,7 @@ public class LPGData {
 
 	public void updateNthPrice(int idx, double price) {
 		try {
-			JSONObject jo = arr_data.get(idx);
+			JSONObject jo = data_arr.get(idx);
 			jo.put("price", price);
 			Time today = new Time(Time.getCurrentTimezone());
 			today.setToNow();
