@@ -182,6 +182,18 @@ public class MainActivity extends FragmentActivity implements
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				/* here need to compare new data 'arr' and old*/
+				for (int i = 0; i < arr.length(); i++) {
+					try {
+						JSONObject item = arr.getJSONObject(i);
+						int id = item.getInt("id");
+						double new_price = item.getDouble("price");
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
 				try {
 					FileOutputStream fos;
 					fos = openFileOutput(filename, Context.MODE_PRIVATE);
@@ -210,8 +222,7 @@ public class MainActivity extends FragmentActivity implements
 			// View v = getLayoutInflater().inflate(R.layout.info_window, null);
 			int idx = Integer.parseInt(marker.getTitle());
 			try {
-				ArrayList<JSONObject> marker_data = ld.getArr();
-				JSONObject jo = marker_data.get(idx);
+				JSONObject jo = ld.getRecordByKey(idx);
 				int type = jo.getInt("type");
 				TextView tw_name = (TextView) window
 						.findViewById(R.id.txtInfoWindowName);
@@ -400,8 +411,9 @@ public class MainActivity extends FragmentActivity implements
 					continue;
 				if (type == 0)
 					continue;
-
-				String idx = Integer.toString(i);
+				
+				int id = item.getInt("id");
+				String idx = Integer.toString(id);
 				double lat = item.getDouble("lat");
 				double lng = item.getDouble("lng");
 				int owner = item.getInt("owner");
@@ -509,8 +521,7 @@ public class MainActivity extends FragmentActivity implements
 		/* if marker is garage, make "Update price" item invisible. */
 		final int idx = Integer.parseInt(cur_marker.getTitle());
 		try {
-			ArrayList<JSONObject> marker_data = ld.getArr();
-			JSONObject jo = marker_data.get(idx);
+			JSONObject jo = ld.getRecordByKey(idx);
 			int type = jo.getInt("type");
 			if (type == 1) {
 				MenuItem it = menu.findItem(R.id.it_web);
@@ -555,8 +566,7 @@ public class MainActivity extends FragmentActivity implements
 			return true;
 		case R.id.it_web:
 			try {
-				ArrayList<JSONObject> marker_data = ld.getArr();
-				JSONObject jo = marker_data.get(idx);
+				JSONObject jo = ld.getRecordByKey(idx);
 				String url = jo.getString("time");
 				if (!url.startsWith("http://") && !url.startsWith("https://"))
 					url = "http://" + url;
@@ -572,8 +582,7 @@ public class MainActivity extends FragmentActivity implements
 			t1 = "",
 			t2 = "";
 			try {
-				ArrayList<JSONObject> marker_data = ld.getArr();
-				JSONObject jo = marker_data.get(idx);
+				JSONObject jo = ld.getRecordByKey(idx);
 				price = Double.toString(jo.getDouble("price"));
 				if (price.length() == 1)
 					price = price + ".00";
@@ -608,7 +617,7 @@ public class MainActivity extends FragmentActivity implements
 						@Override
 						public void onClick(DialogInterface dialog, int id) {
 							String price = userInput.getText().toString();
-							ld.updateNthPrice(idx, Double.parseDouble(price));
+							ld.updatePriceByKey(idx, Double.parseDouble(price));
 
 							try {
 								FileOutputStream fos;
@@ -671,11 +680,9 @@ public class MainActivity extends FragmentActivity implements
 			return true;
 		case R.id.it_send_message:
 			try {
-				ArrayList<JSONObject> marker_data = ld.getArr();
-				JSONObject jo = marker_data.get(idx);
+				JSONObject jo = ld.getRecordByKey(idx);
 				String name = jo.getString("name");
-				Intent i = (new Helper()).send_mail_to_developer("Subject",
-						"I'm email body.: " + name);
+				Intent i = (new Helper()).send_mail_to_developer("Mail about: "+ name, "");
 				startActivity(Intent.createChooser(i, "Send Email"));
 			} catch (Exception e) {
 				e.printStackTrace();

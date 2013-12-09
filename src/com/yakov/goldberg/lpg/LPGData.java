@@ -149,9 +149,6 @@ public class LPGData {
 	public ArrayList<JSONObject> getArr() {
 		return data_arr;
 	}
-	public Map<Integer, JSONObject> getMap() {
-		return data_map;
-	}
 
 	/* Copy data from Assets file into Internal file after first install */
 	public void fromAssetsToFile(AssetManager am, FileOutputStream fos) {
@@ -185,9 +182,9 @@ public class LPGData {
 		parseJsonTimestampAndData(str_data);
 	}
 
-	public void updateNthPrice(int idx, double price) {
+	public void updatePriceByKey(int idx, double price) {
 		try {
-			JSONObject jo = data_arr.get(idx);
+			JSONObject jo = data_map.get(idx);
 			jo.put("price", price);
 			Time today = new Time(Time.getCurrentTimezone());
 			today.setToNow();
@@ -197,4 +194,10 @@ public class LPGData {
 			e.printStackTrace();
 		}
 	}
+	
+	public JSONObject getRecordByKey(int idx) {
+		return data_map.get(idx);
+	}
+	
+	
 }
