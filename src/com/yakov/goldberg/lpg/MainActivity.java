@@ -762,8 +762,8 @@ public class MainActivity extends FragmentActivity implements
 	    popup.setContentView(layout);
 		layout.post(new Runnable() {
 			public void run() {
-				popup.showAtLocation(layout, Gravity.CENTER_HORIZONTAL, 50, 50);
-				popup.update(10, 300, 500, 500);
+				popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
+				popup.update(0, 0, 500, 550);
 			}
 		});
 	}
