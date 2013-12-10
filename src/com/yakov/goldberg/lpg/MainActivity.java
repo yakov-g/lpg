@@ -41,6 +41,7 @@ import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 /*
  import android.os.StrictMode;
@@ -95,6 +96,36 @@ public class MainActivity extends FragmentActivity implements
 	private double dprice = 2.0;
 	private SharedPreferences sharedPref;
 	Map<Integer, String> map;
+	private int mInterval = 1000; // 5 seconds by default, can be changed later
+	private Handler mHandler;
+
+	Runnable mStatusChecker = new Runnable() {
+		@Override
+		public void run() {
+			updateStatus(); // this function can change value of mInterval.
+		}
+	};
+
+	void startRepeatingTask() {
+		mStatusChecker.run();
+	}
+
+	int count = 0;
+	void updateStatus()
+	{
+		LPGApp h = (LPGApp) this.getApplication();
+		if (h.updated_prices.length() != 0) {
+			showPopup2(h.updated_prices);
+			h.updated_prices = "";
+			return;
+		}
+		
+		if (count < 12)
+		{
+			mHandler.postDelayed(mStatusChecker, mInterval);
+		}
+		count += 1;
+	}
 
 	private void setMinMaxPrice(double _min_price) {
 		min_price = _min_price;
@@ -183,57 +214,55 @@ public class MainActivity extends FragmentActivity implements
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				/* here need to compare new data 'arr' and old*/
+				/* here need to compare new data 'arr' and old */
 				for (int i = 0; i < arr.length(); i++) {
 					try {
 						JSONObject item = arr.getJSONObject(i);
 						int id = item.getInt("id");
 						double price_new = item.getDouble("price");
 						JSONObject item_old = ld.getRecordByKey(id);
-						if (item_old != null)
-						{
-						   String l = "";
-						   String name = item.getString("name");
-						   double price_old = item_old.getDouble("price");
-						   if ((price_old == 0) &&  (price_new != 0))
-						   {
-							   //status("Price was updated");
-							   l = name + ": old: " + Double.toString(price_old) +
-									   "; new: " + Double.toString(price_new) + "\n";
-						   }
-						   else if (price_old > price_new)
-						   {
-							   status("Good");
-							   l = name + ": old: " + Double.toString(price_old) +
-									   "; new: " + Double.toString(price_new) + "\n";
-						   }
-						   else if (price_old < price_new)
-						   {
-							   status("Bad"); 
-							   l = name + ": old: " + Double.toString(price_old) +
-									   "; new: " + Double.toString(price_new) + "\n";
-						   }
-						   if (l.length() != 0)
-						   {
-							   res += l;
-						   }
+						if (item_old != null) {
+							String l = "";
+							String name = item.getString("name");
+							double price_old = item_old.getDouble("price");
+							if ((price_old == 0) && (price_new != 0)) {
+								// status("Price was updated");
+								l = name + ": old: "
+										+ Double.toString(price_old)
+										+ "; new: "
+										+ Double.toString(price_new) + "\n";
+							} else if (price_old > price_new) {
+								status("Good");
+								l = name + ": old: "
+										+ Double.toString(price_old)
+										+ "; new: "
+										+ Double.toString(price_new) + "\n";
+							} else if (price_old < price_new) {
+								status("Bad");
+								l = name + ": old: "
+										+ Double.toString(price_old)
+										+ "; new: "
+										+ Double.toString(price_new) + "\n";
+							}
+							if (l.length() != 0) {
+								res += l;
+							}
 						}
-						
-						
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 				LPGApp h = (LPGApp) context.getApplicationContext();
 				h.updated_prices = res;
-				
+
 				try {
 					FileOutputStream fos;
 					fos = openFileOutput(filename, Context.MODE_PRIVATE);
 					ld.setConfigDataAndData(fos, config_data, arr);
 					fos.close();
 					drawMap(ld.getArr());
-					//status("redrawing map");
+					// status("redrawing map");
 				} catch (Exception ee) {
 					ee.printStackTrace();
 				}
@@ -426,6 +455,7 @@ public class MainActivity extends FragmentActivity implements
 			showPopup();
 		}
 		runTimeFetchService();
+		mHandler = new Handler();
 	}
 
 	public void drawMap(ArrayList<JSONObject> marker_data) {
@@ -444,7 +474,7 @@ public class MainActivity extends FragmentActivity implements
 					continue;
 				if (type == 0)
 					continue;
-				
+
 				int id = item.getInt("id");
 				String idx = Integer.toString(id);
 				double lat = item.getDouble("lat");
@@ -485,8 +515,8 @@ public class MainActivity extends FragmentActivity implements
 			message_bar.setVisibility(View.GONE);
 		}
 		drawMap(ld.getArr());
-		LPGApp h = (LPGApp) this.getApplication();
-		status(h.updated_prices);
+
+		startRepeatingTask();
 		// FIXME: this moves camera to location, when I cancel NavApp choosing
 		/*
 		 * if(gps.canGetLocation()) { LatLng LocTmp = new
@@ -717,7 +747,8 @@ public class MainActivity extends FragmentActivity implements
 			try {
 				JSONObject jo = ld.getRecordByKey(idx);
 				String name = jo.getString("name");
-				Intent i = (new Helper()).send_mail_to_developer("Mail about: "+ name, "");
+				Intent i = (new Helper()).send_mail_to_developer("Mail about: "
+						+ name, "");
 				startActivity(Intent.createChooser(i, "Send Email"));
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -773,6 +804,7 @@ public class MainActivity extends FragmentActivity implements
 
 		Button close_but;
 		ImageButton rate_but, fb_but;
+		final TextView rate_tw;
 		final PopupWindow popup = new PopupWindow(this);
 
 		// popup.setBackgroundDrawable(new BitmapDrawable());
@@ -780,6 +812,8 @@ public class MainActivity extends FragmentActivity implements
 		close_but = (Button) layout.findViewById(R.id.later_but);
 		rate_but = (ImageButton) layout.findViewById(R.id.rate_button);
 		fb_but = (ImageButton) layout.findViewById(R.id.facebook_button);
+		rate_tw = (TextView) layout.findViewById(R.id.popup_textview);
+
 		close_but.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				popup.dismiss();
@@ -792,7 +826,7 @@ public class MainActivity extends FragmentActivity implements
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(str)));
 			}
 		});
-		
+
 		final Context ctx = this;
 		fb_but.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
@@ -801,16 +835,25 @@ public class MainActivity extends FragmentActivity implements
 			}
 		});
 
-	    popup.setContentView(layout);
+		popup.setContentView(layout);
 		layout.post(new Runnable() {
 			public void run() {
-				popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
-				popup.update(0, 0, 500, 550);
+				int w;
+				View ll = (View) findViewById(R.id.main_layout);
+				popup.showAtLocation(ll, Gravity.CENTER, 0, 0);
+				w = ll.getWidth();
+				if (w < 500) {
+					w = w - 20;
+					rate_tw.setTextSize(13);
+					popup.update(0, 0, w, 400);
+				} else {
+					popup.update(0, 0, 500, 550);
+				}
+
 			}
 		});
 	}
-	
-	
+
 	public void showPopup2(String text_to_set) {
 		// Inflate the popup_layout.xml
 		LinearLayout viewGroup = (LinearLayout) this.findViewById(R.id.popup);
@@ -821,30 +864,43 @@ public class MainActivity extends FragmentActivity implements
 
 		Button close_but;
 		ImageButton rate_but, fb_but;
-		TextView tw;
+		final TextView rate_tw;
 		final PopupWindow popup = new PopupWindow(this);
 
 		// popup.setBackgroundDrawable(new BitmapDrawable());
 
 		close_but = (Button) layout.findViewById(R.id.later_but);
+		close_but.setText("Close");
 		rate_but = (ImageButton) layout.findViewById(R.id.rate_button);
 		fb_but = (ImageButton) layout.findViewById(R.id.facebook_button);
-		tw = (TextView) layout.findViewById(R.id.popup_textview);
-		tw.setText(text_to_set);
+		rate_tw = (TextView) layout.findViewById(R.id.popup_textview);
+		rate_tw.setText(text_to_set);
 		rate_but.setVisibility(View.GONE);
 		fb_but.setVisibility(View.GONE);
-		
+
+		final Context current_act = this;
 		close_but.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				popup.dismiss();
+				LPGApp h = (LPGApp) current_act.getApplicationContext();
+				h.updated_prices = "";
 			}
 		});
 
-	    popup.setContentView(layout);
+		popup.setContentView(layout);
 		layout.post(new Runnable() {
 			public void run() {
-				popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
-				popup.update(0, 0, 600, 750);
+				int w;
+				View ll = (View) findViewById(R.id.main_layout);
+				popup.showAtLocation(ll, Gravity.CENTER, 0, 0);
+				w = ll.getWidth();
+				if (w < 500) {
+					w = w - 20;
+					rate_tw.setTextSize(13);
+					popup.update(0, 0, w, 650);
+				} else {
+					popup.update(0, 0, 500, 550);
+				}
 			}
 		});
 	}

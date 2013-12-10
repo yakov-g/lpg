@@ -8,7 +8,6 @@ public class LPGApp extends Application {
 	
 	@Override
 	public void onCreate(){
-		updated_prices = "yasha";
-	
+		updated_prices = "";
 	}
 }
