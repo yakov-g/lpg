@@ -171,6 +171,7 @@ public class MainActivity extends FragmentActivity implements
 			else if (answer.equals("all")) {
 				if (!db_thread_locked)
 					return;
+				String res = "";
 				db_thread_locked = false;
 				JSONArray arr = null;
 				JSONObject config_data = null;
@@ -187,7 +188,37 @@ public class MainActivity extends FragmentActivity implements
 					try {
 						JSONObject item = arr.getJSONObject(i);
 						int id = item.getInt("id");
-						double new_price = item.getDouble("price");
+						double price_new = item.getDouble("price");
+						JSONObject item_old = ld.getRecordByKey(id);
+						if (item_old != null)
+						{
+						   String l = "";
+						   String name = item.getString("name");
+						   double price_old = item_old.getDouble("price");
+						   if ((price_old == 0) &&  (price_new != 0))
+						   {
+							   //status("Price was updated");
+							   l = name + ": old: " + Double.toString(price_old) +
+									   "; new: " + Double.toString(price_new) + "\n";
+						   }
+						   else if (price_old > price_new)
+						   {
+							   status("Good");
+							   l = name + ": old: " + Double.toString(price_old) +
+									   "; new: " + Double.toString(price_new) + "\n";
+						   }
+						   else if (price_old < price_new)
+						   {
+							   status("Bad"); 
+							   l = name + ": old: " + Double.toString(price_old) +
+									   "; new: " + Double.toString(price_new) + "\n";
+						   }
+						   if (l.length() != 0)
+						   {
+							   res += l;
+						   }
+						}
+						
 						
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -200,10 +231,11 @@ public class MainActivity extends FragmentActivity implements
 					ld.setConfigDataAndData(fos, config_data, arr);
 					fos.close();
 					drawMap(ld.getArr());
-					status("redrawing map");
+					//status("redrawing map");
 				} catch (Exception ee) {
 					ee.printStackTrace();
 				}
+				showPopup2(res);
 			} else if (answer.equals("price")) {
 				status("price updated");
 				// runTimeFetchService();
@@ -757,7 +789,7 @@ public class MainActivity extends FragmentActivity implements
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(str)));
 			}
 		});
-
+		
 		final Context ctx = this;
 		fb_but.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
@@ -771,6 +803,45 @@ public class MainActivity extends FragmentActivity implements
 			public void run() {
 				popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
 				popup.update(0, 0, 500, 550);
+			}
+		});
+	}
+	
+	
+	public void showPopup2(String text_to_set) {
+		// Inflate the popup_layout.xml
+		LinearLayout viewGroup = (LinearLayout) this.findViewById(R.id.popup);
+		LayoutInflater layoutInflater = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View layout = layoutInflater.inflate(R.layout.popup_start,
+				viewGroup);
+
+		Button close_but;
+		ImageButton rate_but, fb_but;
+		TextView tw;
+		final PopupWindow popup = new PopupWindow(this);
+
+		// popup.setBackgroundDrawable(new BitmapDrawable());
+
+		close_but = (Button) layout.findViewById(R.id.later_but);
+		rate_but = (ImageButton) layout.findViewById(R.id.rate_button);
+		fb_but = (ImageButton) layout.findViewById(R.id.facebook_button);
+		tw = (TextView) layout.findViewById(R.id.popup_textview);
+		tw.setText(text_to_set);
+		rate_but.setVisibility(View.GONE);
+		fb_but.setVisibility(View.GONE);
+		
+		close_but.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				popup.dismiss();
+			}
+		});
+
+	    popup.setContentView(layout);
+		layout.post(new Runnable() {
+			public void run() {
+				popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
+				popup.update(0, 0, 600, 750);
 			}
 		});
 	}
