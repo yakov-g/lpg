@@ -224,6 +224,8 @@ public class MainActivity extends FragmentActivity implements
 						e.printStackTrace();
 					}
 				}
+				LPGApp h = (LPGApp) context.getApplicationContext();
+				h.updated_prices = res;
 				
 				try {
 					FileOutputStream fos;
@@ -235,7 +237,6 @@ public class MainActivity extends FragmentActivity implements
 				} catch (Exception ee) {
 					ee.printStackTrace();
 				}
-				showPopup2(res);
 			} else if (answer.equals("price")) {
 				status("price updated");
 				// runTimeFetchService();
@@ -484,6 +485,8 @@ public class MainActivity extends FragmentActivity implements
 			message_bar.setVisibility(View.GONE);
 		}
 		drawMap(ld.getArr());
+		LPGApp h = (LPGApp) this.getApplication();
+		status(h.updated_prices);
 		// FIXME: this moves camera to location, when I cancel NavApp choosing
 		/*
 		 * if(gps.canGetLocation()) { LatLng LocTmp = new
