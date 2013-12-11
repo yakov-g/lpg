@@ -14,6 +14,7 @@
     <string name="popup_content">אנו מקווים שתיהנו להשתמש ביישום זה. הדעה שלך
          מאוד חשוב לנו, ולכן היינו מבקשים מכם לדרג יישום ולבקר בדף שלנו בפייסבוק. אתה יכול לעשות זאת מאוחר יותר בדף \"עזרה\".</string>
     <string name="popup_later">מאוחר יותר</string>
+    <string name="popup_header">מחירים מעודכנים</string>
      
     <!-- Marker's context menu items -->
      <string name="it_navigate">נווט</string>

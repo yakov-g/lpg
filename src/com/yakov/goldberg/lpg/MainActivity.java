@@ -805,10 +805,12 @@ public class MainActivity extends FragmentActivity implements
 		Button close_but;
 		ImageButton rate_but, fb_but;
 		final TextView rate_tw;
+		TextView tw;
 		final PopupWindow popup = new PopupWindow(this);
 
 		// popup.setBackgroundDrawable(new BitmapDrawable());
-
+		tw = (TextView) layout.findViewById(R.id.popup_header_textview);
+		tw.setVisibility(View.GONE);
 		close_but = (Button) layout.findViewById(R.id.later_but);
 		rate_but = (ImageButton) layout.findViewById(R.id.rate_button);
 		fb_but = (ImageButton) layout.findViewById(R.id.facebook_button);

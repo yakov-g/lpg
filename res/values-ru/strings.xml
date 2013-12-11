@@ -13,6 +13,7 @@
         Пожалуйста оцените нашу работу, а также посетите нашу страницу в Фейсбуке. 
         Вы также можете сделать это позже на странице \"Помощь\"</string>
     <string name="popup_later">Позже</string>
+    <string name="popup_header">Обновленные цены</string>
     
     <!-- Marker's context menu items -->
     <string name="it_navigate">Проложить маршрут</string>

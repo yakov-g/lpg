@@ -19,6 +19,7 @@
         is very important to us, so we would ask you to rate application and visit our page on Facebook.
         You can also do it later on \"Help\" page.</string>
     <string name="popup_later">Later</string>
+    <string name="popup_header">Updated prices</string>
     
     <!-- Marker's context menu items -->
     <string name="it_navigate">Navigate</string>
