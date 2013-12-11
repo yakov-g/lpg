@@ -35,6 +35,8 @@
     <string name="pref_logo">Show logo</string>
     <string name="pref_stations">Show LPG stations</string>
     <string name="pref_garages">Show LPG garages</string>
+    <string name="pref_show_price_updates">Show price updates</string>
+    <string name="pref_show_price_updates_summary">Shows list of stations with updated prices</string>
     <string name="pref_message_bar">Show messages</string>
      <!--  Preference value -->
     <string name="pref_version_code">pref_version_code</string>

@@ -29,6 +29,8 @@
      <string name="pref_logo">הצג לוגו</string>
      <string name="pref_stations">הצג תחנות תדלוק בגז</string>
      <string name="pref_garages">הצג מוסכים</string>
+     <string name="pref_show_price_updates">הצג עדכוני מחיר</string>
+     <string name="pref_show_price_updates_summary">מציג רשימה של תחנות עם מחירים מעודכנים</string>
      <string name="pref_message_bar">הצג הודעות</string>
      
      <string name="help_content">האפליקציה מציגה אה על גבי מפה את כל תחנות התדלוק בגז הקיימות בישראל. כמו כן, באפליקציה תוכלו למצוא מידע שימושי על התחנות: כתובת, שעות פעילות ומחירי הגז.

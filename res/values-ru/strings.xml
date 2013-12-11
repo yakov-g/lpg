@@ -28,6 +28,8 @@
     <string name="pref_logo">Показывать логотипы</string>
     <string name="pref_stations">Показывать заправки</string>
     <string name="pref_garages">Показывать автосервисы</string>
+    <string name="pref_show_price_updates">Показывать обновления цен</string>
+    <string name="pref_show_price_updates_summary">Показывается список заправок с обновленными ценами</string>
     <string name="pref_message_bar">Показывать сообщения</string>
     
     <string name="help_content">Данное приложение поможет Вам найти газовую автозаправку в Израиле и проложить маршрут с помощью Вашей любимой навигационной программы.\n\n
