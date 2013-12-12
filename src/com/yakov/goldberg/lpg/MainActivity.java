@@ -226,25 +226,16 @@ public class MainActivity extends FragmentActivity implements
 							String name = item.getString("name");
 							double price_old = item_old.getDouble("price");
 							if ((price_old == 0) && (price_new != 0)) {
-								// status("Price was updated");
-								l = name + ": old: "
-										+ Double.toString(price_old)
-										+ "; new: "
+								l = name + ": \u200e\u20aa "
 										+ Double.toString(price_new) + "\n";
+								res += l;
 							} else if (price_old > price_new) {
-								status("Good");
-								l = name + ": old: "
-										+ Double.toString(price_old)
-										+ "; new: "
+								l = name + ": \u200e\u20aa "
 										+ Double.toString(price_new) + "\n";
+								res += l;
 							} else if (price_old < price_new) {
-								status("Bad");
-								l = name + ": old: "
-										+ Double.toString(price_old)
-										+ "; new: "
+								l = name + ": \u200e\u20aa "
 										+ Double.toString(price_new) + "\n";
-							}
-							if (l.length() != 0) {
 								res += l;
 							}
 						}
@@ -363,7 +354,7 @@ public class MainActivity extends FragmentActivity implements
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		setContentView(R.layout.activity_main);
 		mHandler = new Handler();
-		
+
 		tw = (TextView) findViewById(R.id.textView1);
 		but_prev = (Button) findViewById(R.id.button_prev);
 		but_next = (Button) findViewById(R.id.button_next);
