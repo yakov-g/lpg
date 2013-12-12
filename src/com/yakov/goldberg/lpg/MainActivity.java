@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.util.Log;
 import android.view.View.OnClickListener;
 
 import org.json.JSONArray;
@@ -111,17 +112,16 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	int count = 0;
-	void updateStatus()
-	{
+
+	void updateStatus() {
 		LPGApp h = (LPGApp) this.getApplication();
 		if (h.updated_prices.length() != 0) {
 			showPopup2(h.updated_prices);
 			h.updated_prices = "";
 			return;
 		}
-		
-		if (count < 12)
-		{
+
+		if (count < 12) {
 			mHandler.postDelayed(mStatusChecker, mInterval);
 		}
 		count += 1;
@@ -362,7 +362,8 @@ public class MainActivity extends FragmentActivity implements
 
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		setContentView(R.layout.activity_main);
-
+		mHandler = new Handler();
+		
 		tw = (TextView) findViewById(R.id.textView1);
 		but_prev = (Button) findViewById(R.id.button_prev);
 		but_next = (Button) findViewById(R.id.button_next);
@@ -455,7 +456,6 @@ public class MainActivity extends FragmentActivity implements
 			showPopup();
 		}
 		runTimeFetchService();
-		mHandler = new Handler();
 	}
 
 	public void drawMap(ArrayList<JSONObject> marker_data) {
@@ -516,7 +516,9 @@ public class MainActivity extends FragmentActivity implements
 		}
 		drawMap(ld.getArr());
 
-		startRepeatingTask();
+		if (sharedPref.getBoolean("pref_show_price_updates", true)) {
+			startRepeatingTask();
+		}
 		// FIXME: this moves camera to location, when I cancel NavApp choosing
 		/*
 		 * if(gps.canGetLocation()) { LatLng LocTmp = new
