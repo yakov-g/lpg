@@ -57,11 +57,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
@@ -90,15 +93,14 @@ public class MainActivity extends FragmentActivity implements
 	private LPGData ld;
 	static final String filename = "lpg_db";
 	private Marker cur_marker;
-	private static boolean time_thread_locked = false;
-	private static boolean db_thread_locked = false;
 	private double min_price = 2.5;
 	private double max_price = 0;
 	private double dprice = 2.0;
 	private SharedPreferences sharedPref;
 	Map<Integer, String> map;
-	private int mInterval = 1000; // 5 seconds by default, can be changed later
+	private int mInterval = 2000; // 5 seconds by default, can be changed later
 	private Handler mHandler;
+	private final ResponseReceiver rr = new ResponseReceiver();
 
 	Runnable mStatusChecker = new Runnable() {
 		@Override
@@ -107,21 +109,24 @@ public class MainActivity extends FragmentActivity implements
 		}
 	};
 
+	int count = 0;
+	
 	void startRepeatingTask() {
+		count = 0;
 		mStatusChecker.run();
 	}
 
-	int count = 0;
-
 	void updateStatus() {
+		Log.v("", "status: count " + Integer.toString(count));
 		LPGApp h = (LPGApp) this.getApplication();
 		if (h.updated_prices.length() != 0) {
+			Log.v("", "status: count " + Integer.toString(count) + " show");
 			showPopup2(h.updated_prices);
 			h.updated_prices = "";
 			return;
 		}
 
-		if (count < 12) {
+		if (count < 30) {
 			mHandler.postDelayed(mStatusChecker, mInterval);
 		}
 		count += 1;
@@ -133,9 +138,6 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	private void runDbFetchService() {
-		if (db_thread_locked)
-			return;
-		db_thread_locked = true;
 		Intent srv;
 		srv = new Intent(this, BackgroundService.class);
 		String uriString = "lpg://?op=get_all";
@@ -144,9 +146,6 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	private void runTimeFetchService() {
-		if (time_thread_locked)
-			return;
-		time_thread_locked = true;
 		Intent srv;
 		srv = new Intent(this, BackgroundService.class);
 		String uriString = "lpg://?op=get_timestamp";
@@ -177,9 +176,7 @@ public class MainActivity extends FragmentActivity implements
 			String answer = u.getQueryParameter("answer");
 
 			if (answer.equals("time")) {
-				if (!time_thread_locked)
-					return;
-				time_thread_locked = false;
+				Log.v("", "status: time");
 
 				JSONObject jo = null;
 				try {
@@ -200,10 +197,8 @@ public class MainActivity extends FragmentActivity implements
 			}
 
 			else if (answer.equals("all")) {
-				if (!db_thread_locked)
-					return;
+				Log.v("", "status: all");
 				String res = "";
-				db_thread_locked = false;
 				JSONArray arr = null;
 				JSONObject config_data = null;
 				try {
@@ -246,6 +241,7 @@ public class MainActivity extends FragmentActivity implements
 				}
 				LPGApp h = (LPGApp) context.getApplicationContext();
 				h.updated_prices = res;
+				Log.v("", "status: res: " + res);
 
 				try {
 					FileOutputStream fos;
@@ -380,12 +376,6 @@ public class MainActivity extends FragmentActivity implements
 			message_bar.setVisibility(View.VISIBLE);
 		}
 
-		/* Initialize receiver to handle messages from service intent. */
-		ResponseReceiver rr = new ResponseReceiver();
-		IntentFilter mStatusIntentFilter = new IntentFilter("AnswerIntent");
-		LocalBroadcastManager.getInstance(this).registerReceiver(rr,
-				mStatusIntentFilter);
-
 		ld = new LPGData();
 		/* Load data from file. */
 		try {
@@ -498,6 +488,13 @@ public class MainActivity extends FragmentActivity implements
 		}
 	}
 
+	@Override
+	protected void onPause() {
+		super.onPause();
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(rr);
+	}
+
+	@Override
 	protected void onResume() {
 		super.onResume();
 		if (sharedPref.getBoolean("pref_message_bar", true)) {
@@ -510,6 +507,10 @@ public class MainActivity extends FragmentActivity implements
 		if (sharedPref.getBoolean("pref_show_price_updates", true)) {
 			startRepeatingTask();
 		}
+		/* Initialize receiver to handle messages from service intent. */
+		IntentFilter mStatusIntentFilter = new IntentFilter("AnswerIntent");
+		LocalBroadcastManager.getInstance(this).registerReceiver(rr,
+				mStatusIntentFilter);
 		// FIXME: this moves camera to location, when I cancel NavApp choosing
 		/*
 		 * if(gps.canGetLocation()) { LatLng LocTmp = new
@@ -528,6 +529,8 @@ public class MainActivity extends FragmentActivity implements
 	public void onStop() {
 		super.onStop();
 		EasyTracker.getInstance().activityStop(this); // Add this method.
+		mHandler.removeCallbacks(mStatusChecker);
+		
 	}
 
 	@Override
@@ -849,9 +852,10 @@ public class MainActivity extends FragmentActivity implements
 		});
 	}
 
-	public void showPopup2(String text_to_set) {
+	public void showPopup2(String text_to_show) {
 		// Inflate the popup_layout.xml
-		LinearLayout viewGroup = (LinearLayout) this.findViewById(R.id.popup);
+		//LinearLayout viewGroup = (LinearLayout) this.findViewById(R.id.popup);
+		ScrollView viewGroup = (ScrollView) this.findViewById(R.id.scroller);
 		LayoutInflater layoutInflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		final View layout = layoutInflater.inflate(R.layout.popup_start,
@@ -861,42 +865,37 @@ public class MainActivity extends FragmentActivity implements
 		ImageButton rate_but, fb_but;
 		final TextView rate_tw;
 		final PopupWindow popup = new PopupWindow(this);
-
-		// popup.setBackgroundDrawable(new BitmapDrawable());
-
+		popup.setContentView(layout);
+		//popup.setWindowLayoutMode(LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		
 		close_but = (Button) layout.findViewById(R.id.later_but);
 		close_but.setText("Close");
 		rate_but = (ImageButton) layout.findViewById(R.id.rate_button);
 		fb_but = (ImageButton) layout.findViewById(R.id.facebook_button);
 		rate_tw = (TextView) layout.findViewById(R.id.popup_textview);
-		rate_tw.setText(text_to_set);
+		rate_tw.setText(text_to_show);
 		rate_but.setVisibility(View.GONE);
 		fb_but.setVisibility(View.GONE);
-
-		final Context current_act = this;
+		
+		Log.v("", "status: text w " + Integer.toString(rate_tw.getWidth()));
+		
 		close_but.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				popup.dismiss();
-				LPGApp h = (LPGApp) current_act.getApplicationContext();
-				h.updated_prices = "";
 			}
 		});
 
-		popup.setContentView(layout);
-		layout.post(new Runnable() {
-			public void run() {
-				int w;
-				View ll = (View) findViewById(R.id.main_layout);
-				popup.showAtLocation(ll, Gravity.CENTER, 0, 0);
-				w = ll.getWidth();
-				if (w < 500) {
-					w = w - 20;
-					rate_tw.setTextSize(13);
-					popup.update(0, 0, w, 650);
-				} else {
-					popup.update(0, 0, 500, 550);
-				}
-			}
-		});
+		View ll = (View) findViewById(R.id.main_layout);
+		int w;
+		popup.showAtLocation(ll, Gravity.CENTER, 0, 0);
+		w = ll.getWidth();
+		if (w < 500) {
+			w = w - 20;
+			rate_tw.setTextSize(13);
+			popup.update(0, 0, w, 650);
+			Log.v("", "status: text w " + Integer.toString(rate_tw.getWidth()));
+		} else {
+			popup.update(0, 0, 530, 550);
+		}
 	}
 }
