@@ -3,10 +3,6 @@
 
     <CheckBoxPreference
         android:defaultValue="true"
-        android:key="pref_logo"
-        android:title="@string/pref_logo" />
-    <CheckBoxPreference
-        android:defaultValue="true"
         android:key="pref_stations"
         android:title="@string/pref_stations" />
     <CheckBoxPreference
@@ -16,8 +12,12 @@
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="pref_show_price_updates"
-        android:title="@string/pref_show_price_updates"
-        android:summary="@string/pref_show_price_updates_summary"/>
+        android:summary="@string/pref_show_price_updates_summary"
+        android:title="@string/pref_show_price_updates" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_logo"
+        android:title="@string/pref_logo" />
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="pref_message_bar"

@@ -15,9 +15,7 @@
     <string name="title_activity_settings">Settings</string>
     
     <!-- Popup window -->
-    <string name="popup_content">We hope you enjoy using this application. Your opinion 
-        is very important to us, so we would ask you to rate application and visit our page on Facebook.
-        You can also do it later on \"Help\" page.</string>
+    <string name="popup_content">We hope you enjoy using our application. Please take a second to give us your feedback.</string>
     <string name="popup_later">Later</string>
     <string name="popup_header">Updated prices</string>
     
@@ -26,20 +24,20 @@
     <string name="it_price">Update price</string>
     <string name="it_price_memo">price should be in range:</string>
     <string name="it_web">Visit web page</string>
-    <string name="it_send_message">Send info about place</string>
+    <string name="it_send_message">Report on incorrect info</string>
     
     <!-- Update dialog buttons -->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     
     <!--  Preference strings -->
-    <string name="pref_logo">Show logo</string>
+    <string name="pref_logo">Show station/garage logo</string>
     <string name="pref_stations">Show LPG stations</string>
     <string name="pref_garages">Show LPG garages</string>
     <string name="pref_show_price_updates">Show price updates</string>
-    <string name="pref_show_price_updates_summary">Shows list of stations with updated prices</string>
+    <string name="pref_show_price_updates_summary">Shows a list of stations in which the price was updated</string>
     <string name="pref_message_bar">Show messages</string>
-     <!--  Preference value -->
+    <!--  Preference value -->
     <string name="pref_version_code">pref_version_code</string>
     
     <string name="help_content">This app helps you to locate LPG refilling stations in Israel.\n 
@@ -55,6 +53,5 @@
 		                yakov.goldberg@gmail.com\n\n
 		                Application is provided \"as is\".\n
 		                The author is not responsible for any information inaccuracies in application 
-		                and for any consequences resulting from usage of application.</string>
-		                
+		                and for any consequences resulting from usage of application.</string>	                
 </resources>

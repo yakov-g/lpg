@@ -9,9 +9,8 @@
     <string name="title_activity_settings">Настройки</string>
     
     <!-- Popup window -->
-    <string name="popup_content">Нам очень важно Ваше мнение о приложении. 
-        Пожалуйста оцените нашу работу, а также посетите нашу страницу в Фейсбуке. 
-        Вы также можете сделать это позже на странице \"Помощь\"</string>
+    <string name="popup_content">Мы надеемся, что Вам нравится пользоватся этим приложением. 
+        Пожалуйста оцените нашу работу.</string>
     <string name="popup_later">Позже</string>
     <string name="popup_header">Обновленные цены</string>
     
@@ -20,17 +19,17 @@
     <string name="it_price">Обновить цену</string>
     <string name="it_price_memo">Цена должна быть в диапазоне:</string>
     <string name="it_web">Открыть сайт</string>
-    <string name="it_send_message">Послать сообщение о станции</string>
+    <string name="it_send_message">Сообщить об ошибке</string>
     
      <!-- Update dialog buttons -->
     <string name="cancel">Отменить</string>
 
     <!--  Preference strings -->
-    <string name="pref_logo">Показывать логотипы</string>
+    <string name="pref_logo">Показывать логотипы заправок/гаражей</string>
     <string name="pref_stations">Показывать заправки</string>
     <string name="pref_garages">Показывать автосервисы</string>
     <string name="pref_show_price_updates">Показывать обновления цен</string>
-    <string name="pref_show_price_updates_summary">Показывается список заправок с обновленными ценами</string>
+    <string name="pref_show_price_updates_summary">Список заправок, на которых цены были обновлены</string>
     <string name="pref_message_bar">Показывать сообщения</string>
     
     <string name="help_content">Данное приложение поможет Вам найти газовую автозаправку в Израиле и проложить маршрут с помощью Вашей любимой навигационной программы.\n\n

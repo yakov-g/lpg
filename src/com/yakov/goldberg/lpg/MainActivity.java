@@ -57,8 +57,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -504,13 +502,14 @@ public class MainActivity extends FragmentActivity implements
 		}
 		drawMap(ld.getArr());
 
-		if (sharedPref.getBoolean("pref_show_price_updates", true)) {
-			startRepeatingTask();
-		}
 		/* Initialize receiver to handle messages from service intent. */
 		IntentFilter mStatusIntentFilter = new IntentFilter("AnswerIntent");
 		LocalBroadcastManager.getInstance(this).registerReceiver(rr,
 				mStatusIntentFilter);
+		
+		if (sharedPref.getBoolean("pref_show_price_updates", true)) {
+			startRepeatingTask();
+		}
 		// FIXME: this moves camera to location, when I cancel NavApp choosing
 		/*
 		 * if(gps.canGetLocation()) { LatLng LocTmp = new
@@ -743,7 +742,7 @@ public class MainActivity extends FragmentActivity implements
 			try {
 				JSONObject jo = ld.getRecordByKey(idx);
 				String name = jo.getString("name");
-				Intent i = (new Helper()).send_mail_to_developer("Mail about: "
+				Intent i = (new Helper()).send_mail_to_developer("Report about mistake: "
 						+ name, "");
 				startActivity(Intent.createChooser(i, "Send Email"));
 			} catch (Exception e) {
