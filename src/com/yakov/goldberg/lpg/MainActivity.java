@@ -108,7 +108,7 @@ public class MainActivity extends FragmentActivity implements
 	};
 
 	int count = 0;
-	
+
 	void startRepeatingTask() {
 		count = 0;
 		mStatusChecker.run();
@@ -119,7 +119,7 @@ public class MainActivity extends FragmentActivity implements
 		LPGApp h = (LPGApp) this.getApplication();
 		if (h.updated_prices.length() != 0) {
 			Log.v("", "status: count " + Integer.toString(count) + " show");
-			showPopup2(h.updated_prices);
+			showPopup3(h.updated_prices);
 			h.updated_prices = "";
 			return;
 		}
@@ -500,7 +500,7 @@ public class MainActivity extends FragmentActivity implements
 		IntentFilter mStatusIntentFilter = new IntentFilter("AnswerIntent");
 		LocalBroadcastManager.getInstance(this).registerReceiver(rr,
 				mStatusIntentFilter);
-		
+
 		if (sharedPref.getBoolean("pref_show_price_updates", true)) {
 			startRepeatingTask();
 		}
@@ -523,7 +523,7 @@ public class MainActivity extends FragmentActivity implements
 		super.onStop();
 		EasyTracker.getInstance().activityStop(this); // Add this method.
 		mHandler.removeCallbacks(mStatusChecker);
-		
+
 	}
 
 	@Override
@@ -736,8 +736,8 @@ public class MainActivity extends FragmentActivity implements
 			try {
 				JSONObject jo = ld.getRecordByKey(idx);
 				String name = jo.getString("name");
-				Intent i = (new Helper()).send_mail_to_developer("Report about mistake: "
-						+ name, "");
+				Intent i = (new Helper()).send_mail_to_developer(
+						"Report about mistake: " + name, "");
 				startActivity(Intent.createChooser(i, "Send Email"));
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -845,50 +845,29 @@ public class MainActivity extends FragmentActivity implements
 		});
 	}
 
-	public void showPopup2(String text_to_show) {
-		// Inflate the popup_layout.xml
-		//LinearLayout viewGroup = (LinearLayout) this.findViewById(R.id.popup);
-		ScrollView viewGroup = (ScrollView) this.findViewById(R.id.scroller);
-		LayoutInflater layoutInflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		final View layout = layoutInflater.inflate(R.layout.popup_start,
-				viewGroup);
+	public void showPopup3(String text_to_show) {
+		LayoutInflater inflater = this.getLayoutInflater();
+		View updatedPrices = inflater
+				.inflate(R.layout.price_update_popup, null);
 
-		Button close_but;
-		ImageButton rate_but, fb_but;
-		final TextView rate_tw;
-		final PopupWindow popup = new PopupWindow(this);
-		popup.setContentView(layout);
-		//popup.setWindowLayoutMode(LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		
-		close_but = (Button) layout.findViewById(R.id.later_but);
-		close_but.setText("Close");
-		rate_but = (ImageButton) layout.findViewById(R.id.rate_button);
-		fb_but = (ImageButton) layout.findViewById(R.id.facebook_button);
-		rate_tw = (TextView) layout.findViewById(R.id.popup_textview);
-		rate_tw.setText(text_to_show);
-		rate_but.setVisibility(View.GONE);
-		fb_but.setVisibility(View.GONE);
-		
-		Log.v("", "status: text w " + Integer.toString(rate_tw.getWidth()));
-		
-		close_but.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				popup.dismiss();
-			}
-		});
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setView(updatedPrices);
+		TextView tw1 = (TextView) updatedPrices
+				.findViewById(R.id.popup_header_textview2);
+		TextView tw2 = (TextView) updatedPrices
+				.findViewById(R.id.popup_textview2);
 
-		View ll = (View) findViewById(R.id.main_layout);
-		int w;
-		popup.showAtLocation(ll, Gravity.CENTER, 0, 0);
-		w = ll.getWidth();
-		if (w < 500) {
-			w = w - 20;
-			rate_tw.setTextSize(13);
-			popup.update(0, 0, w, 650);
-			Log.v("", "status: text w " + Integer.toString(rate_tw.getWidth()));
-		} else {
-			popup.update(0, 0, 530, 550);
-		}
+		tw1.setText(getResources().getString(R.string.popup_header));
+		tw2.setText(text_to_show);
+
+		builder.setPositiveButton(R.string.ok,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+
+		final AlertDialog updateDialog = builder.create();
+		updateDialog.show();
 	}
 }
