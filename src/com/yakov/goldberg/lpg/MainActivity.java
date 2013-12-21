@@ -368,12 +368,6 @@ public class MainActivity extends FragmentActivity implements
 		map.put(201, "nanagas_marker_and.png");
 		map.put(202, "gaspro_marker_and.png");
 
-		if (!show_messages) {
-			message_bar.setVisibility(View.GONE);
-		} else {
-			message_bar.setVisibility(View.VISIBLE);
-		}
-
 		ld = new LPGData();
 		/* Load data from file. */
 		try {
