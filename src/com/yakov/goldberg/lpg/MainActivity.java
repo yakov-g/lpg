@@ -211,6 +211,8 @@ public class MainActivity extends FragmentActivity implements
 				for (int i = 0; i < arr.length(); i++) {
 					try {
 						JSONObject item = arr.getJSONObject(i);
+						int type = item.getInt("type");
+						if (type != 1) continue;
 						int id = item.getInt("id");
 						double price_new = item.getDouble("price");
 						JSONObject item_old = ld.getRecordByKey(id);
