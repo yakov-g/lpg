@@ -30,6 +30,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -66,6 +67,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -99,6 +102,7 @@ public class MainActivity extends FragmentActivity implements
 	private int mInterval = 2000; // 5 seconds by default, can be changed later
 	private Handler mHandler;
 	private final ResponseReceiver rr = new ResponseReceiver();
+	int google_play_services_status;
 
 	Runnable mStatusChecker = new Runnable() {
 		@Override
@@ -115,7 +119,6 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	void updateStatus() {
-		Log.v("", "status: count " + Integer.toString(count));
 		LPGApp h = (LPGApp) this.getApplication();
 		if (h.updated_prices.length() != 0) {
 			Log.v("", "status: count " + Integer.toString(count) + " show");
@@ -212,7 +215,8 @@ public class MainActivity extends FragmentActivity implements
 					try {
 						JSONObject item = arr.getJSONObject(i);
 						int type = item.getInt("type");
-						if (type != 1) continue;
+						if (type != 1)
+							continue;
 						int id = item.getInt("id");
 						double price_new = item.getDouble("price");
 						JSONObject item_old = ld.getRecordByKey(id);
@@ -347,90 +351,96 @@ public class MainActivity extends FragmentActivity implements
 		 * ).permitNetwork().permitDiskReads().permitDiskWrites().build());
 		 */
 
-		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		setContentView(R.layout.activity_main);
-		mHandler = new Handler();
+		google_play_services_status = GooglePlayServicesUtil
+				.isGooglePlayServicesAvailable(this);
+		if (google_play_services_status != ConnectionResult.SUCCESS) {
+			GooglePlayServicesUtil.getErrorDialog(google_play_services_status,
+					this, 1).show();
+		} else {
+			sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+			setContentView(R.layout.activity_main);
+			mHandler = new Handler();
 
-		tw = (TextView) findViewById(R.id.textView1);
-		but_prev = (Button) findViewById(R.id.button_prev);
-		but_next = (Button) findViewById(R.id.button_next);
-		message_bar = (LinearLayout) findViewById(R.id.message_bar);
-		boolean show_messages = sharedPref.getBoolean("pref_message_bar", true);
-		map = new HashMap<Integer, String>();
-		map.put(1, "da_marker_and.png");
-		map.put(2, "paz_marker_and.png");
-		map.put(3, "sonol_marker_and.png");
-		map.put(4, "delek_marker_and.png");
-		map.put(5, "tapuz_marker_and.png");
-		map.put(6, "amisragas_marker_and.png");
-		map.put(7, "yaad_marker_and.png");
-		map.put(8, "gaz_igal_marker_and.png");
-		map.put(9, "supergas_marker_and.png");
-		map.put(10, "ten_marker_and.png");
-		map.put(201, "nanagas_marker_and.png");
-		map.put(202, "gaspro_marker_and.png");
+			tw = (TextView) findViewById(R.id.textView1);
+			but_prev = (Button) findViewById(R.id.button_prev);
+			but_next = (Button) findViewById(R.id.button_next);
+			message_bar = (LinearLayout) findViewById(R.id.message_bar);
+			map = new HashMap<Integer, String>();
+			map.put(1, "da_marker_and.png");
+			map.put(2, "paz_marker_and.png");
+			map.put(3, "sonol_marker_and.png");
+			map.put(4, "delek_marker_and.png");
+			map.put(5, "tapuz_marker_and.png");
+			map.put(6, "amisragas_marker_and.png");
+			map.put(7, "yaad_marker_and.png");
+			map.put(8, "gaz_igal_marker_and.png");
+			map.put(9, "supergas_marker_and.png");
+			map.put(10, "ten_marker_and.png");
+			map.put(201, "nanagas_marker_and.png");
+			map.put(202, "gaspro_marker_and.png");
 
-		ld = new LPGData();
-		/* Load data from file. */
-		try {
-			FileInputStream fis;
-			fis = openFileInput(filename);
-			ld.loadDataFromFile(fis);
-			fis.close();
-		} catch (FileNotFoundException e) {
-			/* If there is no such file, create it during first launch. */
+			ld = new LPGData();
+			/* Load data from file. */
 			try {
-				FileOutputStream fos;
-				AssetManager am = getAssets();
-				fos = openFileOutput(filename, Context.MODE_PRIVATE);
-				ld.fromAssetsToFile(am, fos);
-				fos.close();
-
 				FileInputStream fis;
 				fis = openFileInput(filename);
 				ld.loadDataFromFile(fis);
 				fis.close();
-			} catch (Exception ee) {
-				ee.printStackTrace();
+			} catch (FileNotFoundException e) {
+				/* If there is no such file, create it during first launch. */
+				try {
+					FileOutputStream fos;
+					AssetManager am = getAssets();
+					fos = openFileOutput(filename, Context.MODE_PRIVATE);
+					ld.fromAssetsToFile(am, fos);
+					fos.close();
+
+					FileInputStream fis;
+					fis = openFileInput(filename);
+					ld.loadDataFromFile(fis);
+					fis.close();
+				} catch (Exception ee) {
+					ee.printStackTrace();
+				}
+
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			LatLng CurLoc = new LatLng(32.076757, 34.786835);
+			int zoom = 10;
+
+			gps = new GPSLocation(this);
+			registerForContextMenu(tw);
+			setMinMaxPrice(ld.getMinPrice());
+
+			FragmentManager fm;
+			SupportMapFragment mapFragment;
+			// fm = getFragmentManager();
+			fm = getSupportFragmentManager();
+			mapFragment = ((SupportMapFragment) fm.findFragmentById(R.id.map));
+			mMap = mapFragment.getMap();
+			mMap.setOnMarkerClickListener(this);
+			mMap.setOnInfoWindowClickListener(this);
+			mMap.setInfoWindowAdapter(new LPGWindow());
+			mMap.setMyLocationEnabled(true);
+
+			if (gps.canGetLocation()) {
+				CurLoc = new LatLng(gps.getLatitude(), gps.getLongitude());
+				zoom = 11;
+			}
+
+			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(CurLoc, zoom));
+
+			// Put markers on map.
+			drawMap(ld.getArr());
+			// If version was changed, show popup window to get liked
+			if (app_version_changed()) {
+				showPopup();
+			}
+			runTimeFetchService();
 		}
-
-		LatLng CurLoc = new LatLng(32.076757, 34.786835);
-		int zoom = 10;
-
-		gps = new GPSLocation(this);
-		FragmentManager fm;
-		SupportMapFragment mapFragment;
-		// fm = getFragmentManager();
-		fm = getSupportFragmentManager();
-		mapFragment = ((SupportMapFragment) fm.findFragmentById(R.id.map));
-		mMap = mapFragment.getMap();
-		mMap.setOnMarkerClickListener(this);
-		mMap.setOnInfoWindowClickListener(this);
-		mMap.setInfoWindowAdapter(new LPGWindow());
-		mMap.setMyLocationEnabled(true);
-		registerForContextMenu(tw);
-		if (gps.canGetLocation()) {
-			CurLoc = new LatLng(gps.getLatitude(), gps.getLongitude());
-			zoom = 11;
-		}
-
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(CurLoc, zoom));
-
-		// status(Integer.toString(ld.getTimestamp()));
-
-		setMinMaxPrice(ld.getMinPrice());
-		/* Put markers on map. */
-		drawMap(ld.getArr());
-		/* If version was changed, show popup window to get liked */
-		if (app_version_changed()) {
-			showPopup();
-		}
-		runTimeFetchService();
 	}
 
 	public void drawMap(ArrayList<JSONObject> marker_data) {
@@ -485,47 +495,55 @@ public class MainActivity extends FragmentActivity implements
 	@Override
 	protected void onPause() {
 		super.onPause();
-		LocalBroadcastManager.getInstance(this).unregisterReceiver(rr);
+		if (google_play_services_status == ConnectionResult.SUCCESS) {
+			LocalBroadcastManager.getInstance(this).unregisterReceiver(rr);
+		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (sharedPref.getBoolean("pref_message_bar", true)) {
-			message_bar.setVisibility(View.VISIBLE);
-		} else {
-			message_bar.setVisibility(View.GONE);
-		}
-		drawMap(ld.getArr());
+		if (google_play_services_status == ConnectionResult.SUCCESS) {
+			if (sharedPref.getBoolean("pref_message_bar", true)) {
+				message_bar.setVisibility(View.VISIBLE);
+			} else {
+				message_bar.setVisibility(View.GONE);
+			}
+			drawMap(ld.getArr());
 
-		/* Initialize receiver to handle messages from service intent. */
-		IntentFilter mStatusIntentFilter = new IntentFilter("AnswerIntent");
-		LocalBroadcastManager.getInstance(this).registerReceiver(rr,
-				mStatusIntentFilter);
+			/* Initialize receiver to handle messages from service intent. */
+			IntentFilter mStatusIntentFilter = new IntentFilter("AnswerIntent");
+			LocalBroadcastManager.getInstance(this).registerReceiver(rr,
+					mStatusIntentFilter);
 
-		if (sharedPref.getBoolean("pref_show_price_updates", true)) {
-			startRepeatingTask();
+			if (sharedPref.getBoolean("pref_show_price_updates", true)) {
+				startRepeatingTask();
+			}
+			// FIXME: this moves camera to location, when I cancel NavApp
+			// choosing
+			/*
+			 * if(gps.canGetLocation()) { LatLng LocTmp = new
+			 * LatLng(gps.getLatitude(), gps.getLongitude());
+			 * mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocTmp, 11)); }
+			 */
 		}
-		// FIXME: this moves camera to location, when I cancel NavApp choosing
-		/*
-		 * if(gps.canGetLocation()) { LatLng LocTmp = new
-		 * LatLng(gps.getLatitude(), gps.getLongitude());
-		 * mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocTmp, 11)); }
-		 */
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
-		EasyTracker.getInstance().activityStart(this);
+		if (google_play_services_status == ConnectionResult.SUCCESS) {
+			EasyTracker.getInstance().activityStart(this);
+		}
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		EasyTracker.getInstance().activityStop(this); // Add this method.
-		mHandler.removeCallbacks(mStatusChecker);
-
+		if (google_play_services_status == ConnectionResult.SUCCESS) {
+			EasyTracker.getInstance().activityStop(this); // Add this method.
+			mHandler.removeCallbacks(mStatusChecker);
+		}
 	}
 
 	@Override
