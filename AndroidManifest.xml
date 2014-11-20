@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="21" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -45,13 +45,13 @@
             </intent-filter>
         </activity>
         <!--
-home: AIzaSyAEdBNstYhA52X0uCQFzu8RTX7l2fzoFlI
+home: AIzaSyA22U_i-l9AFgDuZOkt6vnpgqsxUe1n6n0
 work: AIzaSyAaKywJYgiFKM2IW0XQENp0q6KzNnwSs7o
 release: AIzaSyBo2c1GkbhZDdwHTjbUNEeBTLktRQTaqq4
         -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAEdBNstYhA52X0uCQFzu8RTX7l2fzoFlI" />
+            android:value="AIzaSyA22U_i-l9AFgDuZOkt6vnpgqsxUe1n6n0" />
 
         <activity
             android:name="com.yakov.goldberg.lpg.HelpActivity"
@@ -69,6 +69,9 @@ release: AIzaSyBo2c1GkbhZDdwHTjbUNEeBTLktRQTaqq4
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <!-- Google Analytics Version v4 needs this value for easy tracking -->
+        <meta-data android:name="com.google.android.gms.analytics.globalConfigResource"
+            android:resource="@xml/global_tracker" />
     </application>
 
 </manifest>

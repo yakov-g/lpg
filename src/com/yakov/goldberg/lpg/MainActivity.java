@@ -66,7 +66,6 @@ import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -81,6 +80,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.analytics.GoogleAnalytics;
 
 public class MainActivity extends FragmentActivity implements
 		OnMarkerClickListener, OnInfoWindowClickListener {
@@ -533,7 +533,8 @@ public class MainActivity extends FragmentActivity implements
 	public void onStart() {
 		super.onStart();
 		if (google_play_services_status == ConnectionResult.SUCCESS) {
-			EasyTracker.getInstance().activityStart(this);
+			//Get an Analytics tracker to report app starts & uncaught exceptions etc.
+			GoogleAnalytics.getInstance(this).reportActivityStart(this);
 		}
 	}
 
@@ -541,7 +542,8 @@ public class MainActivity extends FragmentActivity implements
 	public void onStop() {
 		super.onStop();
 		if (google_play_services_status == ConnectionResult.SUCCESS) {
-			EasyTracker.getInstance().activityStop(this); // Add this method.
+			//Stop the analytics tracking
+			GoogleAnalytics.getInstance(this).reportActivityStop(this);
 			mHandler.removeCallbacks(mStatusChecker);
 		}
 	}
@@ -550,6 +552,8 @@ public class MainActivity extends FragmentActivity implements
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		//Get a Tracker (should auto-report)
+		((LPGApp) getApplication()).getTracker(LPGApp.TrackerName.APP_TRACKER);
 		return true;
 	}
 
