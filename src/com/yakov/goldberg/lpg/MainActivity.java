@@ -95,8 +95,7 @@ public class MainActivity extends FragmentActivity implements
 	static final String filename = "lpg_db";
 	private Marker cur_marker;
 	private double min_price = 2.5;
-	private double max_price = 0;
-	private double dprice = 2.0;
+	private double max_price = 4.5;
 	private SharedPreferences sharedPref;
 	Map<Integer, Integer> map;
 
@@ -134,9 +133,9 @@ public class MainActivity extends FragmentActivity implements
 		count += 1;
 	}
 
-	private void setMinMaxPrice(double _min_price) {
+	private void setMinMaxPrice(double _min_price, double _max_price) {
 		min_price = _min_price;
-		max_price = _min_price + dprice;
+		max_price = _max_price;
 	}
 
 	private void runDbFetchService() {
@@ -207,7 +206,7 @@ public class MainActivity extends FragmentActivity implements
 					arr = new JSONArray(u.getQueryParameter("data"));
 					config_data = new JSONObject(
 							u.getQueryParameter("config_data"));
-					setMinMaxPrice(config_data.getDouble("min_price"));
+					setMinMaxPrice(config_data.getDouble("min_price"), config_data.getDouble("max_price"));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -415,7 +414,7 @@ public class MainActivity extends FragmentActivity implements
 
 			gps = new GPSLocation(this);
 			registerForContextMenu(tw);
-			setMinMaxPrice(ld.getMinPrice());
+			setMinMaxPrice(ld.getMinPrice(), ld.getMaxPrice());
 
 			FragmentManager fm;
 			SupportMapFragment mapFragment;

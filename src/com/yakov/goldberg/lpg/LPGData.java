@@ -145,6 +145,16 @@ public class LPGData {
 		}
 		return ret;
 	}
+	
+	public double getMaxPrice() {
+		double ret = 0;
+		try {
+			ret = config_data.getDouble("max_price");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
 
 	public ArrayList<JSONObject> getArr() {
 		return data_arr;
@@ -198,6 +208,4 @@ public class LPGData {
 	public JSONObject getRecordByKey(int idx) {
 		return data_map.get(idx);
 	}
-	
-	
 }
