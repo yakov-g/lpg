@@ -98,7 +98,8 @@ public class MainActivity extends FragmentActivity implements
 	private double max_price = 0;
 	private double dprice = 2.0;
 	private SharedPreferences sharedPref;
-	Map<Integer, String> map;
+	Map<Integer, Integer> map;
+
 	private int mInterval = 2000; // 5 seconds by default, can be changed later
 	private Handler mHandler;
 	private final ResponseReceiver rr = new ResponseReceiver();
@@ -365,19 +366,20 @@ public class MainActivity extends FragmentActivity implements
 			but_prev = (Button) findViewById(R.id.button_prev);
 			but_next = (Button) findViewById(R.id.button_next);
 			message_bar = (LinearLayout) findViewById(R.id.message_bar);
-			map = new HashMap<Integer, String>();
-			map.put(1, "da_marker_and.png");
-			map.put(2, "paz_marker_and.png");
-			map.put(3, "sonol_marker_and.png");
-			map.put(4, "delek_marker_and.png");
-			map.put(5, "tapuz_marker_and.png");
-			map.put(6, "amisragas_marker_and.png");
-			map.put(7, "yaad_marker_and.png");
-			map.put(8, "gaz_igal_marker_and.png");
-			map.put(9, "supergas_marker_and.png");
-			map.put(10, "ten_marker_and.png");
-			map.put(201, "nanagas_marker_and.png");
-			map.put(202, "gaspro_marker_and.png");
+
+			map = new HashMap<Integer, Integer>();
+			map.put(1, R.drawable.da_marker_and);
+			map.put(2, R.drawable.paz_marker_and);
+			map.put(3, R.drawable.sonol_marker_and);
+			map.put(4, R.drawable.delek_marker_and);
+			map.put(5, R.drawable.tapuz_marker_and);
+			map.put(6, R.drawable.amisragas_marker_and);
+			map.put(7, R.drawable.yaad_marker_and);
+			map.put(8, R.drawable.gaz_igal_marker_and);
+			map.put(9, R.drawable.supergas_marker_and);
+			map.put(10, R.drawable.ten_marker_and);
+			map.put(201, R.drawable.nanagas_marker_and);
+			map.put(202, R.drawable.gaspro_marker_and);
 
 			ld = new LPGData();
 			/* Load data from file. */
@@ -469,7 +471,7 @@ public class MainActivity extends FragmentActivity implements
 				BitmapDescriptor mar = null;
 
 				if (show_logo && map.containsKey(owner)) {
-					mar = BitmapDescriptorFactory.fromAsset(map.get(owner));
+					mar = BitmapDescriptorFactory.fromResource(map.get(owner));
 				} else {
 					float color = 0;
 					switch (type) {
