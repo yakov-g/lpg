@@ -83,7 +83,7 @@ import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.analytics.GoogleAnalytics;
 
 public class MainActivity extends FragmentActivity implements
-		OnMarkerClickListener, OnInfoWindowClickListener {
+               OnMarkerClickListener, OnInfoWindowClickListener {
 
 	private GoogleMap mMap;
 	private TextView tw;
@@ -259,7 +259,7 @@ public class MainActivity extends FragmentActivity implements
 				}
 			} else if (answer.equals("price")) {
 				status("price updated");
-				// runTimeFetchService();
+				//runTimeFetchService();
 			}
 		}
 	}
@@ -510,6 +510,7 @@ public class MainActivity extends FragmentActivity implements
 			} else {
 				message_bar.setVisibility(View.GONE);
 			}
+			message_bar.setVisibility(View.GONE);
 			drawMap(ld.getArr());
 
 			/* Initialize receiver to handle messages from service intent. */
@@ -549,17 +550,17 @@ public class MainActivity extends FragmentActivity implements
 		}
 	}
 
+	public boolean onMarkerClick(Marker marker) {
+		return false;
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		//Get a Tracker (should auto-report)
-		((LPGApp) getApplication()).getTracker(LPGApp.TrackerName.APP_TRACKER);
+		((LPGApp) getApplication()).getAppTracker();
 		return true;
-	}
-
-	public boolean onMarkerClick(Marker marker) {
-		return false;
 	}
 
 	@Override
@@ -597,7 +598,7 @@ public class MainActivity extends FragmentActivity implements
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.point_menu, menu);
-		/* if marker is garage, make "Update price" item invisible. */
+		// if marker is garage, make "Update price" item invisible.
 		final int idx = Integer.parseInt(cur_marker.getTitle());
 		try {
 			JSONObject jo = ld.getRecordByKey(idx);
@@ -627,10 +628,10 @@ public class MainActivity extends FragmentActivity implements
 		case R.id.it_navigate:
 			final LatLng m_pos = cur_marker.getPosition();
 			cur_marker = null;
-			/* Show place in waze */
+			// Show place in waze
 			// String s = String.format("waze://?ll=%s, %s&z=8", m_pos.latitude,
 			// m_pos.longitude);
-			/* Open window to choose map application */
+			// Open window to choose map application
 			String ss = String.format("geo: %s, %s", m_pos.latitude,
 					m_pos.longitude);
 			try {
@@ -778,8 +779,7 @@ public class MainActivity extends FragmentActivity implements
 		showPopup();
 	}
 
-	/*
-	 * Check if saved version code == current code. Used to show popup window on
+	 /** Check if saved version code == current code. Used to show popup window on
 	 * first run after install or update
 	 */
 	public boolean app_version_changed() {

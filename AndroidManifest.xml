@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yakov.goldberg.lpg"
-    android:versionCode="18"
-    android:versionName="0.1.5" >
+    android:versionCode="16"
+    android:versionName="0.1.6" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -70,8 +70,10 @@ release: AIzaSyBo2c1GkbhZDdwHTjbUNEeBTLktRQTaqq4
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <!-- Google Analytics Version v4 needs this value for easy tracking -->
+        <!--
         <meta-data android:name="com.google.android.gms.analytics.globalConfigResource"
             android:resource="@xml/global_tracker" />
+        -->
     </application>
 
 </manifest>

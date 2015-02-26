@@ -18,9 +18,11 @@
         android:defaultValue="true"
         android:key="pref_logo"
         android:title="@string/pref_logo" />
+    <!--
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="pref_message_bar"
         android:title="@string/pref_message_bar" />
+        -->
 
 </PreferenceScreen>

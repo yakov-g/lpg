@@ -2,7 +2,7 @@
 <resources>
 
     <!-- General -->
-    <string name="version_string">Version: 0.1.3; build: 15</string>
+    <string name="version_string">Version: 0.1.6</string>
     
     <!-- Action bar menu items -->
     <string name="app_name">גפ\'\'מ ישראל</string>
