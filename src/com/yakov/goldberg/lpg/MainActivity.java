@@ -510,7 +510,6 @@ public class MainActivity extends FragmentActivity implements
 			} else {
 				message_bar.setVisibility(View.GONE);
 			}
-			message_bar.setVisibility(View.GONE);
 			drawMap(ld.getArr());
 
 			/* Initialize receiver to handle messages from service intent. */
